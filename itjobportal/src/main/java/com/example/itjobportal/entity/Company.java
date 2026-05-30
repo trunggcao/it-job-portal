@@ -11,6 +11,7 @@ import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_companies")
@@ -27,6 +28,7 @@ public class Company {
     private Long id;
     private String companyName;
     private String website;
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String description;
     private String address;
     private String logoUrl;
@@ -38,4 +40,7 @@ public class Company {
 
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    List<Job> jobs;
 }
