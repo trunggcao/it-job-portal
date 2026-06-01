@@ -28,6 +28,12 @@ public class SkillController {
         return ResponseEntity.status(HttpStatus.OK).body(skills);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<SkillDTO> updateSkill(@PathVariable Long id, @RequestBody SkillDTO skillDTO){
+        SkillDTO skillUpdated = skillService.updateSkill(id,skillDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(skillUpdated);
+    }
+
     @GetMapping("/search")
     public ResponseEntity<List<SkillDTO>> findByName(@RequestParam String keyword){
         List<SkillDTO> skills = skillService.findByNameContainingIgnoreCase(keyword);

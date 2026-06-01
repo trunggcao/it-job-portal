@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SkilllRepository extends JpaRepository<Skill,Long> {
     List<Skill> findByNameContainingIgnoreCase(String name);
+    Boolean existsByName(String name);
+    Boolean existsByNameAndIdNot(String name, Long id);
 }
