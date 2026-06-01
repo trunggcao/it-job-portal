@@ -6,9 +6,12 @@ import com.example.itjobportal.entity.Company;
 import com.example.itjobportal.entity.Job;
 import com.example.itjobportal.entity.Skill;
 import com.example.itjobportal.enums.EJobLevel;
+import com.example.itjobportal.repository.CompanyRepository;
 import com.example.itjobportal.repository.JobRepository;
+import com.example.itjobportal.repository.SkilllRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +20,8 @@ import java.util.List;
 public class JobService {
 
     private final JobRepository jobRepository;
+    private final CompanyRepository companyRepository;
+    private final SkilllRepository skilllRepository;
 
     public Job toEntity(JobDTO jobDTO, Company company, List<Skill> skills){
         return Job.builder()
@@ -59,4 +64,70 @@ public class JobService {
                         .toList())
                 .build();
     }
+
+    public JobDTO createJob(JobDTO jobDTO){
+        Company company = companyRepository.findById(jobDTO.getCompanyId())
+                .orElseThrow(() -> new RuntimeException("Company is not found"));
+
+        List<Long> skillIds = jobDTO.getSkills().stream()
+                .map(SkillDTO::getId)
+                .toList();
+
+        List<Skill> skills = skilllRepository.findAllById(skillIds);
+
+        Job job = toEntity(jobDTO,company,skills);
+        Job savedJob = jobRepository.save(job);
+
+        return toDTO(savedJob);
+    }
+
+    public JobDTO updateJob(Long id, JobDTO jobDTO){
+        Job existingJob = jobRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job is not found"));
+
+        Company company = companyRepository.findById(jobDTO.getCompanyId())
+                .orElseThrow(() -> new RuntimeException("Company is not found"));
+
+        List<Long> skillIds = jobDTO.getSkills().stream()
+                .map(SkillDTO::getId)
+                .toList();
+
+        List<Skill> skills = skilllRepository.findAllById(skillIds);
+
+        existingJob.setName(jobDTO.getName());
+        existingJob.setLocation(jobDTO.getLocation());
+        existingJob.setSalary(jobDTO.getSalary());
+        existingJob.setLevel(EJobLevel.valueOf(jobDTO.getLevel()));
+        existingJob.setDescription(jobDTO.getDescription());
+        existingJob.setStartDate(jobDTO.getStartDate());
+        existingJob.setEndDate(jobDTO.getEndDate());
+        existingJob.setCompany(company);
+        existingJob.setSkills(skills);
+
+        return toDTO(existingJob);
+    }
+
+    public List<JobDTO> getAllJob(){
+        List<Job> jobs = jobRepository.findAll();
+        return jobs.stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    @Transactional
+    public void deleteJob(Long id){
+        if (!jobRepository.existsById(id)){
+            throw new RuntimeException("job with id: "+ id + " is not found to delete");
+        }
+        jobRepository.deleteById(id);
+    }
+
+    public List<JobDTO> findByName(String keyword){
+        List<Job> jobs = jobRepository.findByNameContainingIgnoreCase(keyword);
+
+         return jobs.stream()
+                 .map(this::toDTO)
+                 .toList();
+    }
+
 }
