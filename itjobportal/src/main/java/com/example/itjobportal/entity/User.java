@@ -10,6 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name ="tbl_users")
@@ -34,6 +35,9 @@ public class User {
     private LocalDateTime updatedAt;
     private Boolean isActive;
     private String activationToken;
+
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    List<Resume> resumes;
 
     @PrePersist
     public void prePersist(){

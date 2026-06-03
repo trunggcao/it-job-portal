@@ -1,4 +1,7 @@
 package com.example.itjobportal.repository;
 
-public interface ResumeRepository {
+import com.example.itjobportal.entity.Resume;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ResumeRepository extends JpaRepository<Resume, Long> {
 }
