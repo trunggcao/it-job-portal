@@ -130,4 +130,9 @@ public class JobService {
                  .toList();
     }
 
+    public Job findById(Long id){
+        return jobRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Job with id:" + id + " is not found"));
+    }
+
 }
