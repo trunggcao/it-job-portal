@@ -31,14 +31,21 @@ public class SecurityConfig {
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/status","/health","/login",
-                                "/activate","/register",
-                                "/jobs","/jobs/*",
-                                "/companies","/companies/*").permitAll()
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/status","/health","/login","/activate","/register").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/jobs", "/jobs/*").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/companies", "/companies/*").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.POST, "/jobs", "/companies").hasRole("EMPLOYER")
+                        .requestMatchers(org.springframework.http.HttpMethod.PUT, "/jobs/*", "/companies/*").hasRole("EMPLOYER")
+                        .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/jobs/*", "/companies/*").hasRole("EMPLOYER")
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer((oauth2) ->oauth2
-                        .jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoderConfiguration)));
+                .oauth2ResourceServer((oauth2) -> oauth2
+                        .jwt(jwtConfigurer -> jwtConfigurer
+                                .decoder(jwtDecoderConfiguration)
+                                // Áp dụng bộ giải mã quyền hạn tùy chỉnh từ JWT
+                                .jwtAuthenticationConverter(new CustomJwtAuthenticationConverter())
+                        )
+                );
         return httpSecurity.build();
     }
 

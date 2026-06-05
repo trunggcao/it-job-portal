@@ -1,6 +1,7 @@
 package com.example.itjobportal.dto;
 
 
+import com.example.itjobportal.enums.EUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,7 @@ public class UserDTO {
     private String email;
     private String password;
     private String profileImageUrl;
+    private EUserRole role;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

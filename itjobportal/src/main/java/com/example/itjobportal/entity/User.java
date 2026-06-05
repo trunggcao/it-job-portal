@@ -1,5 +1,6 @@
 package com.example.itjobportal.entity;
 
+import com.example.itjobportal.enums.EUserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +37,10 @@ public class User {
     private Boolean isActive;
     private String activationToken;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private EUserRole role;
+
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     List<Resume> resumes;
 
@@ -43,6 +48,9 @@ public class User {
     public void prePersist(){
         if (this.isActive == null){
             isActive = false;
+        }
+        if (this.role == null) {
+            this.role = EUserRole.ROLE_CANDIDATE;
         }
     }
 }

@@ -33,6 +33,7 @@ public class UserService {
                 .email(userDTO.getEmail())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .profileImageUrl(userDTO.getProfileImageUrl())
+                .role(userDTO.getRole())
                 .createdAt(userDTO.getCreatedAt())
                 .updatedAt(userDTO.getUpdatedAt())
                 .build();
@@ -44,6 +45,7 @@ public class UserService {
                 .fullName(user.getFullName())
                 .email(user.getEmail())
                 .profileImageUrl(user.getProfileImageUrl())
+                .role(user.getRole())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
@@ -98,6 +100,7 @@ public class UserService {
                 .fullName(currentUser.getFullName())
                 .email(currentUser.getEmail())
                 .profileImageUrl(currentUser.getProfileImageUrl())
+                .role(currentUser.getRole())
                 .createdAt(currentUser.getCreatedAt())
                 .updatedAt(currentUser.getUpdatedAt())
                 .build();

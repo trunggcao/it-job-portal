@@ -1,6 +1,8 @@
 package com.example.itjobportal.service;
 
 import com.example.itjobportal.dto.AuthDTO;
+import com.example.itjobportal.entity.User;
+import com.example.itjobportal.repository.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
@@ -8,19 +10,24 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class JwtService {
     @Value("${jwt.secret}")
     private String secretkey;
+    private final UserRepository userRepository;
 
     public String generateAccessToken(AuthDTO authDTO){
+        User user = userRepository.findByEmail(authDTO.getEmail())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + authDTO.getEmail()));
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         Date issueTime = new Date();
@@ -30,6 +37,7 @@ public class JwtService {
                 .subject(authDTO.getEmail())
                 .issueTime(issueTime)
                 .expirationTime(expiredTime)
+                .claim("roles", List.of(user.getRole().name()))
                 .build();
 
         Payload payload = new Payload(claimsSet.toJSONObject());
