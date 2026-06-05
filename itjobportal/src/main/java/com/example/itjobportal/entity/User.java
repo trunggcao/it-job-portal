@@ -44,6 +44,9 @@ public class User {
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
     List<Resume> resumes;
 
+    @OneToOne(mappedBy = "employer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Company company;
+
     @PrePersist
     public void prePersist(){
         if (this.isActive == null){

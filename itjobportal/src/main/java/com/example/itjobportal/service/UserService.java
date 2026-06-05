@@ -46,6 +46,7 @@ public class UserService {
                 .email(user.getEmail())
                 .profileImageUrl(user.getProfileImageUrl())
                 .role(user.getRole())
+                .companyId(user.getCompany() != null ? user.getCompany().getId() : null)
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
@@ -101,6 +102,7 @@ public class UserService {
                 .email(currentUser.getEmail())
                 .profileImageUrl(currentUser.getProfileImageUrl())
                 .role(currentUser.getRole())
+                .companyId(currentUser.getCompany() != null ? currentUser.getCompany().getId() : null)
                 .createdAt(currentUser.getCreatedAt())
                 .updatedAt(currentUser.getUpdatedAt())
                 .build();

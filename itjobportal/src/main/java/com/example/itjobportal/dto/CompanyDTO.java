@@ -18,6 +18,7 @@ public class CompanyDTO {
     private String description;
     private String address;
     private String logoUrl;
+    private Long employerId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -43,4 +43,8 @@ public class Company {
 
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     List<Job> jobs;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employer_id", referencedColumnName = "id", unique = true)
+    private User employer;
 }

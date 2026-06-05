@@ -21,6 +21,7 @@ public class UserDTO {
     private String password;
     private String profileImageUrl;
     private EUserRole role;
+    private Long companyId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
