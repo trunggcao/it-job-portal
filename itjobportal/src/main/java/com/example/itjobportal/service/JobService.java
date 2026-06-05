@@ -135,4 +135,9 @@ public class JobService {
                 .orElseThrow(() -> new RuntimeException("Job with id:" + id + " is not found"));
     }
 
+    public JobDTO getById(Long id){
+        Job job = findById(id);
+        return toDTO(job);
+    }
+
 }

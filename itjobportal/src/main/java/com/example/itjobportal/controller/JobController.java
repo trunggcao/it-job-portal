@@ -33,6 +33,12 @@ public class JobController {
         JobDTO jobUpdated = jobService.updateJob(id, jobDTO);
         return ResponseEntity.status(HttpStatus.OK).body(jobUpdated);
     }
+    @GetMapping("/{id}")
+    public  ResponseEntity<JobDTO> getJobById(@PathVariable Long id){
+        JobDTO job = jobService.getById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(job);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteJob(@PathVariable Long id){
