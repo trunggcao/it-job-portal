@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,5 +32,11 @@ public class CandidateResumeController {
     public ResponseEntity<ResumeDTO> findById(@PathVariable Long id){
         ResumeDTO resume = resumeService.findById(id);
         return ResponseEntity.status(HttpStatus.OK).body(resume);
+    }
+
+    @GetMapping("/my-apply")
+    public  ResponseEntity<List<ResumeDTO>> findByCurrentUserId(){
+        List<ResumeDTO> resumes = resumeService.getByCurrentUserId();
+        return ResponseEntity.status(HttpStatus.OK).body(resumes);
     }
 }

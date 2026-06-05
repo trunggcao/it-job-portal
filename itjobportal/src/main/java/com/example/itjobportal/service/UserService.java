@@ -120,4 +120,9 @@ public class UserService {
         }
     }
 
+    public UserDTO getMyProfile(){
+        User myprofile = getCurrentUser();
+        return toDTO(myprofile);
+    }
+
 }

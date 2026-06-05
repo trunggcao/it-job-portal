@@ -113,4 +113,11 @@ public class ResumeService {
                 .map(this::toDTO).toList();
     }
 
+    public List<ResumeDTO> getByCurrentUserId(){
+        User currentUser = userService.getCurrentUser();
+        List<Resume> resumes = resumeRepository.findByUserId(currentUser.getId());
+        return resumes.stream()
+                .map(this::toDTO).toList();
+    }
+
 }

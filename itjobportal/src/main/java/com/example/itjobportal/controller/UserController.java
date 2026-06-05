@@ -47,4 +47,9 @@ public class UserController {
             ));
         }
     }
+    @GetMapping("/me")
+    public ResponseEntity<UserDTO> getMyProfile(){
+        UserDTO myprofile = userService.getMyProfile();
+        return ResponseEntity.status(HttpStatus.OK).body(myprofile);
+    }
 }
