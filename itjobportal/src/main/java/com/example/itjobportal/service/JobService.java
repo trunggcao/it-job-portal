@@ -5,7 +5,9 @@ import com.example.itjobportal.dto.SkillDTO;
 import com.example.itjobportal.entity.Company;
 import com.example.itjobportal.entity.Job;
 import com.example.itjobportal.entity.Skill;
+import com.example.itjobportal.entity.User;
 import com.example.itjobportal.enums.EJobLevel;
+import com.example.itjobportal.enums.EUserRole;
 import com.example.itjobportal.repository.CompanyRepository;
 import com.example.itjobportal.repository.JobRepository;
 import com.example.itjobportal.repository.SkilllRepository;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,8 +25,9 @@ public class JobService {
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
     private final SkilllRepository skilllRepository;
+    private final UserService userService;
 
-    public Job toEntity(JobDTO jobDTO, Company company, List<Skill> skills){
+    public Job toEntity(JobDTO jobDTO, Company company, List<Skill> skills) {
         return Job.builder()
                 .id(jobDTO.getId())
                 .name(jobDTO.getName())
@@ -39,7 +43,7 @@ public class JobService {
                 .build();
     }
 
-    public JobDTO toDTO(Job job){
+    public JobDTO toDTO(Job job) {
         return JobDTO.builder()
                 .id(job.getId())
                 .name(job.getName())
@@ -65,7 +69,7 @@ public class JobService {
                 .build();
     }
 
-    public JobDTO createJob(JobDTO jobDTO){
+    public JobDTO createJob(JobDTO jobDTO) {
         Company company = companyRepository.findById(jobDTO.getCompanyId())
                 .orElseThrow(() -> new RuntimeException("Company is not found"));
 
@@ -75,13 +79,13 @@ public class JobService {
 
         List<Skill> skills = skilllRepository.findAllById(skillIds);
 
-        Job job = toEntity(jobDTO,company,skills);
+        Job job = toEntity(jobDTO, company, skills);
         Job savedJob = jobRepository.save(job);
 
         return toDTO(savedJob);
     }
 
-    public JobDTO updateJob(Long id, JobDTO jobDTO){
+    public JobDTO updateJob(Long id, JobDTO jobDTO) {
         Job existingJob = jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job is not found"));
 
@@ -107,7 +111,7 @@ public class JobService {
         return toDTO(existingJob);
     }
 
-    public List<JobDTO> getAllJob(){
+    public List<JobDTO> getAllJob() {
         List<Job> jobs = jobRepository.findAll();
         return jobs.stream()
                 .map(this::toDTO)
@@ -115,29 +119,43 @@ public class JobService {
     }
 
     @Transactional
-    public void deleteJob(Long id){
-        if (!jobRepository.existsById(id)){
-            throw new RuntimeException("job with id: "+ id + " is not found to delete");
+    public void deleteJob(Long id) {
+        if (!jobRepository.existsById(id)) {
+            throw new RuntimeException("job with id: " + id + " is not found to delete");
         }
         jobRepository.deleteById(id);
     }
 
-    public List<JobDTO> findByName(String keyword){
+    public List<JobDTO> findByName(String keyword) {
         List<Job> jobs = jobRepository.findByNameContainingIgnoreCase(keyword);
 
-         return jobs.stream()
-                 .map(this::toDTO)
-                 .toList();
+        return jobs.stream()
+                .map(this::toDTO)
+                .toList();
     }
 
-    public Job findById(Long id){
+    public Job findById(Long id) {
         return jobRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Job with id:" + id + " is not found"));
     }
 
-    public JobDTO getById(Long id){
+    public JobDTO getById(Long id) {
         Job job = findById(id);
         return toDTO(job);
     }
 
+    public List<JobDTO> getJobByCurrentEmployer() {
+        User currentUser = userService.getCurrentUser();
+        if (currentUser.getRole() != EUserRole.ROLE_EMPLOYER) {
+            throw new RuntimeException("Only Employer can use this method");
+        }
+        Company myCompany = currentUser.getCompany();
+        if (myCompany == null) {
+            return Collections.emptyList();
+        }
+        List<Job> jobs = jobRepository.findByCompany(myCompany);
+        return jobs.stream()
+                .map(this::toDTO)
+                .toList();
+    }
 }

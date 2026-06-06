@@ -51,4 +51,10 @@ public class JobController {
         List<JobDTO> jobs = jobService.findByName(keyword);
         return ResponseEntity.status(HttpStatus.OK).body(jobs);
     }
+
+    @GetMapping("/employer/my-jobs")
+    public ResponseEntity<List<JobDTO>> getMyCompanyJobs() {
+        List<JobDTO> myJobs = jobService.getJobByCurrentEmployer();
+        return ResponseEntity.ok(myJobs);
+    }
 }
