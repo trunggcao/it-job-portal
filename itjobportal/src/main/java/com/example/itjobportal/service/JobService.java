@@ -7,6 +7,7 @@ import com.example.itjobportal.entity.Job;
 import com.example.itjobportal.entity.Skill;
 import com.example.itjobportal.entity.User;
 import com.example.itjobportal.enums.EJobLevel;
+import com.example.itjobportal.enums.ETypeJob;
 import com.example.itjobportal.enums.EUserRole;
 import com.example.itjobportal.repository.CompanyRepository;
 import com.example.itjobportal.repository.JobRepository;
@@ -40,6 +41,8 @@ public class JobService {
                 .isActive(jobDTO.isActive())
                 .company(company)
                 .skills(skills)
+                .typeJob(ETypeJob.valueOf(jobDTO.getTypeJob()))
+                .requirement(jobDTO.getRequirement())
                 .build();
     }
 
@@ -54,6 +57,12 @@ public class JobService {
                 .startDate(job.getStartDate())
                 .endDate(job.getEndDate())
                 .isActive(job.isActive())
+
+                // update job
+                .typeJob(job.getTypeJob().name())
+                .requirement(job.getRequirement())
+                .createdAt(job.getCreatedAt())
+                .updateAt(job.getUpdatedAt())
 
                 // company
                 .companyId(job.getCompany().getId())
@@ -107,8 +116,13 @@ public class JobService {
         existingJob.setEndDate(jobDTO.getEndDate());
         existingJob.setCompany(company);
         existingJob.setSkills(skills);
+        // new update
+        existingJob.setRequirement(jobDTO.getRequirement());
+        existingJob.setTypeJob(ETypeJob.valueOf(jobDTO.getTypeJob()));
 
-        return toDTO(existingJob);
+        Job updateJob = jobRepository.save(existingJob);
+
+        return toDTO(updateJob);
     }
 
     public List<JobDTO> getAllJob() {
@@ -154,6 +168,13 @@ public class JobService {
             return Collections.emptyList();
         }
         List<Job> jobs = jobRepository.findByCompany(myCompany);
+        return jobs.stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    public List<JobDTO> getJobByCompanyId(Long id){
+        List<Job> jobs = jobRepository.findByCompanyId(id);
         return jobs.stream()
                 .map(this::toDTO)
                 .toList();

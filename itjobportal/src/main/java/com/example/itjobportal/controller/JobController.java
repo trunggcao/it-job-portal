@@ -24,7 +24,7 @@ public class JobController {
 
     @GetMapping
     public ResponseEntity<List<JobDTO>> getAllJob(){
-        List<JobDTO> jobs = jobService.getAllJob();
+        List<JobDTO> jobs = jobService.getAllJob(); 
         return ResponseEntity.status(HttpStatus.OK).body(jobs);
     }
 
@@ -56,5 +56,11 @@ public class JobController {
     public ResponseEntity<List<JobDTO>> getMyCompanyJobs() {
         List<JobDTO> myJobs = jobService.getJobByCurrentEmployer();
         return ResponseEntity.ok(myJobs);
+    }
+
+    @GetMapping("/companies/{id}")
+    public ResponseEntity<List<JobDTO>> getJobsByCompanyId(@PathVariable Long id){
+        List<JobDTO> jobs = jobService.getJobByCompanyId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(jobs);
     }
 }

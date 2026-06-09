@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -26,4 +27,8 @@ public class JobDTO {
     private Long companyId;
     private String companyName;
     private List<SkillDTO> skills;
+    private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
+    private String requirement;
+    private String typeJob;
 }

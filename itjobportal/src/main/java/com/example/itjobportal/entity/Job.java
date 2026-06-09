@@ -1,13 +1,17 @@
 package com.example.itjobportal.entity;
 
 import com.example.itjobportal.enums.EJobLevel;
+import com.example.itjobportal.enums.ETypeJob;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -31,6 +35,16 @@ public class Job {
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean isActive;
+
+    @Enumerated(EnumType.STRING)
+    private ETypeJob typeJob;
+    @Column(columnDefinition = "MEDIUMTEXT")
+    private String requirement;
+    @Column(updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "company_id")
