@@ -2,7 +2,10 @@ package com.example.itjobportal.service;
 
 
 import com.example.itjobportal.dto.CompanyDTO;
+import com.example.itjobportal.dto.CompanyVerificationDTO;
+import com.example.itjobportal.dto.SkillDTO;
 import com.example.itjobportal.entity.Company;
+import com.example.itjobportal.entity.CompanyVerification;
 import com.example.itjobportal.entity.User;
 import com.example.itjobportal.enums.EUserRole;
 import com.example.itjobportal.repository.CompanyRepository;
@@ -20,7 +23,7 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
 
-    public Company toEnity(CompanyDTO companyDTO){
+    public Company toEnity(CompanyDTO companyDTO, List<CompanyVerification> companyVerifications){
         Company company = Company.builder()
                 .id(companyDTO.getId())
                 .companyName(companyDTO.getCompanyName())
@@ -28,6 +31,8 @@ public class CompanyService {
                 .description(companyDTO.getDescription())
                 .website(companyDTO.getWebsite())
                 .logoUrl(companyDTO.getLogoUrl())
+                .active(companyDTO.getActive() != null ? companyDTO.getActive() : false)
+                .companyVerifications(companyVerifications)
                 .createdAt(companyDTO.getCreatedAt())
                 .updatedAt(companyDTO.getUpdatedAt())
                 .build();
@@ -46,9 +51,25 @@ public class CompanyService {
                 .description(company.getDescription())
                 .website(company.getWebsite())
                 .logoUrl(company.getLogoUrl())
+                .active(company.isActive())
                 .employerId(company.getEmployer() != null ? company.getEmployer().getId() : null)
                 .createdAt(company.getCreatedAt())
                 .updatedAt(company.getUpdatedAt())
+
+                //companyVerifications
+                .companyVerifications(company.getCompanyVerifications() == null ? new java.util.ArrayList<>() :
+                        company.getCompanyVerifications().stream()
+                                .map(c -> CompanyVerificationDTO.builder()
+                                        .id(c.getId())
+                                        .status(c.getStatus() != null ? c.getStatus().name() : null)
+                                        .taxCode(c.getTaxCode())
+                                        .businessLicenseUrl(c.getBusinessLicenseUrl())
+                                        .rejectReason(c.getRejectReason())
+                                        .companyId(company.getId())
+                                        .companyName(company.getCompanyName())
+                                        .createdAt(c.getCreatedAt())
+                                        .build())
+                                .toList())
                 .build();
     }
 
@@ -64,7 +85,7 @@ public class CompanyService {
         if (employer.getCompany() != null) {
             throw new RuntimeException("Mỗi tài khoản nhà tuyển dụng chỉ được phép quản lý duy nhất 1 công ty!");
         }
-        Company newCompany = toEnity(companyDTO);
+        Company newCompany = toEnity(companyDTO,new java.util.ArrayList<>());
         newCompany.setEmployer(employer);
         newCompany = companyRepository.save(newCompany);
 

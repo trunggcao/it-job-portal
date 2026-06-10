@@ -6,22 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CompanyDTO {
+public class CompanyVerificationDTO {
     private Long id;
+    private String status;
+    private String taxCode;
+    private String businessLicenseUrl;
+    private String rejectReason;
+    private Long companyId;
     private String companyName;
-    private String website;
-    private String description;
-    private String address;
-    private String logoUrl;
-    private Long employerId;
-    private Boolean active;
-    private List<CompanyVerificationDTO> companyVerifications;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

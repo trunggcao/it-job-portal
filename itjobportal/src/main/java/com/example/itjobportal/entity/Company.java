@@ -47,4 +47,10 @@ public class Company {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employer_id", referencedColumnName = "id", unique = true)
     private User employer;
+
+    private boolean active = false;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    private List<CompanyVerification> companyVerifications;
+
 }
