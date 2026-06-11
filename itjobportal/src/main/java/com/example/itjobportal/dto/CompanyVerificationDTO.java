@@ -19,5 +19,7 @@ public class CompanyVerificationDTO {
     private String rejectReason;
     private Long companyId;
     private String companyName;
+    private Long employerId;
+    private String employerName;
     private LocalDateTime createdAt;
 }

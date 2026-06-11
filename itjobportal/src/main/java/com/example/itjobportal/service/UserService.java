@@ -40,6 +40,11 @@ public class UserService {
     }
 
     public  UserDTO toDTO(User user){
+        boolean isCompanyActive = false;
+        if (user.getCompany() != null) {
+
+            isCompanyActive = user.getCompany().isActive();
+        }
         return UserDTO.builder()
                 .id(user.getId())
                 .fullName(user.getFullName())
@@ -47,6 +52,7 @@ public class UserService {
                 .profileImageUrl(user.getProfileImageUrl())
                 .role(user.getRole())
                 .companyId(user.getCompany() != null ? user.getCompany().getId() : null)
+                .companyIsAtive(isCompanyActive)
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();

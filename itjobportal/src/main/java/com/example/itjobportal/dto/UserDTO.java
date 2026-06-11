@@ -22,6 +22,7 @@ public class UserDTO {
     private String profileImageUrl;
     private EUserRole role;
     private Long companyId;
+    private boolean companyIsAtive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
