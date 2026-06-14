@@ -43,6 +43,7 @@ public class CompanyVerificationService {
                 .taxCode(companyVerification.getTaxCode())
                 .businessLicenseUrl(companyVerification.getBusinessLicenseUrl())
                 .rejectReason(companyVerification.getRejectReason())
+                .createdAt(companyVerification.getCreatedAt())
 
                 // company
                 .companyId(companyVerification.getCompany().getId())
