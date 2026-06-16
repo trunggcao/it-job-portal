@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/jobs", "/companies").hasRole("EMPLOYER")
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/jobs/*", "/companies/*").hasRole("EMPLOYER")
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/jobs/*", "/companies/*").hasRole("EMPLOYER")
+                        .requestMatchers( "/admin/*").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2

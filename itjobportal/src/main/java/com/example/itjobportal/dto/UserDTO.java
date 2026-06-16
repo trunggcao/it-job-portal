@@ -25,4 +25,5 @@ public class UserDTO {
     private Boolean companyIsAtive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Boolean isActive;
 }

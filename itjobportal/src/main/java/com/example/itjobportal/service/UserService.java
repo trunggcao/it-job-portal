@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -36,6 +37,7 @@ public class UserService {
                 .role(userDTO.getRole())
                 .createdAt(userDTO.getCreatedAt())
                 .updatedAt(userDTO.getUpdatedAt())
+                .isActive(userDTO.getIsActive())
                 .build();
     }
 
@@ -55,6 +57,7 @@ public class UserService {
                 .companyIsAtive(isCompanyActive)
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
+                .isActive(user.getIsActive())
                 .build();
     }
 
@@ -131,6 +134,13 @@ public class UserService {
     public UserDTO getMyProfile(){
         User myprofile = getCurrentUser();
         return toDTO(myprofile);
+    }
+
+    public List<UserDTO> getUserByNameOrEmail(String keyword){
+        List<User> users = userRepository.getUserByNameOrEmail(keyword);
+        return users.stream()
+                .map(this::toDTO)
+                .toList();
     }
 
 }
