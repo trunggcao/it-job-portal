@@ -17,6 +17,12 @@ public class CompanyVerificationController {
 
     private final CompanyVerificationService companyVerificationService;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CompanyVerificationDTO> getById(@PathVariable Long id){
+        CompanyVerificationDTO companyVerification = companyVerificationService.getById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(companyVerification);
+    }
+
     @PostMapping("/employer")
     public ResponseEntity<CompanyVerificationDTO> createVerifications(@RequestBody CompanyVerificationDTO companyVerificationDTO){
         CompanyVerificationDTO companyVerification = companyVerificationService.createVerification(companyVerificationDTO);
@@ -45,8 +51,10 @@ public class CompanyVerificationController {
     }
 
     @PutMapping("/admin/reject-verification/{id}")
-    public ResponseEntity<CompanyVerificationDTO> rejectVerification(@PathVariable Long id){
-        CompanyVerificationDTO approveVerification = companyVerificationService.rejectVerification(id);
+    public ResponseEntity<CompanyVerificationDTO> rejectVerification(@PathVariable Long id,
+                                                                     @RequestBody java.util.Map<String, String> requestBody){
+        String pureReason = requestBody.get("rejectReason");
+        CompanyVerificationDTO approveVerification = companyVerificationService.rejectVerification(id, pureReason);
         return ResponseEntity.status(HttpStatus.OK).body(approveVerification);
     }
 

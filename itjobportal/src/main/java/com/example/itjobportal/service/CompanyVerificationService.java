@@ -94,7 +94,7 @@ public class CompanyVerificationService {
     }
 
     @Transactional
-    public CompanyVerificationDTO rejectVerification(Long id){
+    public CompanyVerificationDTO rejectVerification(Long id, String rejectReason){
         CompanyVerification companyVerification = companyVerificationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Verification is not found"));
 
@@ -104,6 +104,7 @@ public class CompanyVerificationService {
         companyRepository.save(company);
 
         companyVerification.setStatus(Estatus.REJECTED);
+        companyVerification.setRejectReason(rejectReason);
         companyVerification = companyVerificationRepository.save(companyVerification);
         return toDTO(companyVerification);
     }
@@ -123,5 +124,11 @@ public class CompanyVerificationService {
         return companyVerifications.stream()
                 .map(this::toDTO)
                 .toList();
+    }
+
+    public CompanyVerificationDTO getById(Long id){
+        CompanyVerification companyVerification = companyVerificationRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Companmy verification is not found"));
+        return toDTO(companyVerification);
     }
 }

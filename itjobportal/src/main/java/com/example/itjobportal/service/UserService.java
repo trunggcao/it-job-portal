@@ -114,6 +114,7 @@ public class UserService {
                 .companyId(currentUser.getCompany() != null ? currentUser.getCompany().getId() : null)
                 .createdAt(currentUser.getCreatedAt())
                 .updatedAt(currentUser.getUpdatedAt())
+                .isActive(currentUser.getIsActive())
                 .build();
     }
 
