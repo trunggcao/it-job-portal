@@ -72,4 +72,8 @@ public class ProjectService {
         return projectRepository.findByCandidateProfileId(profile.getId());
     }
 
+    public List<Project> getProjectsByProfileId(Long profileId) {
+        return projectRepository.findByCandidateProfileId(profileId);
+    }
+
 }

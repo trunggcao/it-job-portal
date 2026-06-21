@@ -57,4 +57,15 @@ public class ProjectController {
         return ResponseEntity.ok(projectDTOs);
     }
 
+    @GetMapping("/details/{profileId}")
+    public ResponseEntity<List<ProjectDTO>> getProjectsByProfileId(@PathVariable Long profileId) {
+        List<Project> projects = projectService.getProjectsByProfileId(profileId);
+
+        List<ProjectDTO> projectDTOs = projects.stream()
+                .map(projectService::toDTO)
+                .toList();
+
+        return ResponseEntity.ok(projectDTOs);
+    }
+
 }

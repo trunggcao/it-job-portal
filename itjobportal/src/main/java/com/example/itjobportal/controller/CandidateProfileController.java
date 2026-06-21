@@ -38,10 +38,19 @@ public class CandidateProfileController {
     public ResponseEntity<List<CandidateSearchResponseDTO>> searchCandidates(
             @RequestParam Long employerId, // ID của Nhà tuyển dụng đang thực hiện tìm kiếm
             @RequestParam(required = false) String title,
-            @RequestParam(required = false) List<Long> skillIds) {
+            @RequestParam(required = false) List<Long> skillIds,
+            @RequestParam(required = false) Integer minYearsOfExperience) {
 
-        List<CandidateSearchResponseDTO> results = candidateProfileService.searchCandidatesForEmployer(employerId, title, skillIds);
+        List<CandidateSearchResponseDTO> results = candidateProfileService.searchCandidatesForEmployer(employerId, title, skillIds,minYearsOfExperience);
         return ResponseEntity.ok(results);
+    }
+    @GetMapping("/details/{profileId}")
+    public ResponseEntity<CandidateSearchResponseDTO> getCandidateProfileDetail(
+            @PathVariable Long profileId,
+            @RequestParam Long employerId) {
+
+        CandidateSearchResponseDTO detail = candidateProfileService.getCandidateProfileDetailForEmployer(employerId, profileId);
+        return ResponseEntity.ok(detail);
     }
 
     @PostMapping("/unlock")

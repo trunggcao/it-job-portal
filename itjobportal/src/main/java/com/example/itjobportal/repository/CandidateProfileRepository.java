@@ -15,7 +15,9 @@ public interface CandidateProfileRepository extends JpaRepository<CandidateProfi
             "LEFT JOIN cp.skills s " +
             "WHERE cp.isOpenToWork = true " +
             "AND (:title IS NULL OR LOWER(cp.title) LIKE LOWER(CONCAT('%', :title, '%'))) " +
-            "AND (:skillIds IS NULL OR s.id IN :skillIds)")
+            "AND (:skillIds IS NULL OR s.id IN :skillIds) " +
+            "AND (cp.yearsOfExperience >= :minYearsOfExperience)")
     List<CandidateProfile> searchCandidates(@Param("title") String title,
-                                            @Param("skillIds") List<Long> skillIds);
+                                            @Param("skillIds") List<Long> skillIds,
+                                            @Param("minYearsOfExperience") Integer minYearsOfExperience);
 }

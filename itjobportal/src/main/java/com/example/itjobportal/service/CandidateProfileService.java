@@ -144,13 +144,20 @@ public class CandidateProfileService {
     }
 
     // nhà tuyeen dung
-    public List<CandidateSearchResponseDTO> searchCandidatesForEmployer(Long employerId, String title, List<Long> skillIds) {
-        List<CandidateProfile> profiles = candidateProfileRepository.searchCandidates(
-                (title != null && !title.trim().isEmpty()) ? title : null,
-                (skillIds != null && !skillIds.isEmpty()) ? skillIds : null
-        );
+    public List<CandidateSearchResponseDTO> searchCandidatesForEmployer(Long employerId, String title, List<Long> skillIds,
+                                                                        Integer minYearsOfExperience) {
+
         userRepository.findById(employerId)
                 .orElseThrow(() -> new RuntimeException("Employer is not found"));
+
+        Integer minExp = (minYearsOfExperience != null && minYearsOfExperience >= 0) ? minYearsOfExperience : 0;
+
+        List<CandidateProfile> profiles = candidateProfileRepository.searchCandidates(
+                (title != null && !title.trim().isEmpty()) ? title : null,
+                (skillIds != null && !skillIds.isEmpty()) ? skillIds : null,
+                minExp
+        );
+
 
         return profiles.stream()
                 .map(profile -> {
@@ -160,6 +167,17 @@ public class CandidateProfileService {
                     return toResponseDTO(profile, isUnlocked);
                 })
                 .toList();
+    }
+
+    public CandidateSearchResponseDTO getCandidateProfileDetailForEmployer(Long employerId, Long profileId) {
+        userRepository.findById(employerId)
+                .orElseThrow(() -> new RuntimeException("Employer is not found"));
+        CandidateProfile profile = candidateProfileRepository.findById(profileId)
+                .orElseThrow(() -> new RuntimeException("Candidate profile is not found"));
+
+        boolean isUnlocked = profileUnlockRepository.existsByEmployerIdAndProfileId(employerId, profile.getId());
+
+        return toResponseDTO(profile, isUnlocked);
     }
 
     @Transactional
