@@ -20,6 +20,7 @@ public class Blog {
     private String title;
     @Column(columnDefinition = "TEXT")
     private String content;
+    private String time;
     private boolean published;
     private String image;
 
