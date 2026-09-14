@@ -13,6 +13,7 @@ import com.example.itjobportal.repository.CompanyRepository;
 import com.example.itjobportal.repository.JobRepository;
 import com.example.itjobportal.repository.SkilllRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,7 +80,10 @@ public class JobService {
     }
 
     public JobDTO createJob(JobDTO jobDTO) {
-        Company company = companyRepository.findById(jobDTO.getCompanyId())
+
+        User curentUser = userService.getCurrentUser();
+
+        Company company = companyRepository.findByEmployerId(curentUser.getId())
                 .orElseThrow(() -> new RuntimeException("Company is not found"));
 
         List<Long> skillIds = jobDTO.getSkills().stream()
