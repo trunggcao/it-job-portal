@@ -37,6 +37,8 @@ public class User {
     private Boolean isActive;
     private String activationToken;
 
+    private Integer points;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private EUserRole role;
@@ -57,6 +59,9 @@ public class User {
         }
         if (this.role == null) {
             this.role = EUserRole.ROLE_CANDIDATE;
+        }
+        if (this.points == null) {
+            this.points = 0;
         }
     }
 }

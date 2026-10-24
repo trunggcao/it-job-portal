@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StripeRequest {
-    private Long amount;
+    private Long packageId;
     private Long quantity;
-    private String name;
     private String currency;
 }
