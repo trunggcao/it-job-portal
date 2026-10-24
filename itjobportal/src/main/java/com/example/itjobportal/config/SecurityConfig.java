@@ -38,12 +38,12 @@ public class SecurityConfig {
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/jobs/*", "/companies/*").hasRole("EMPLOYER")
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/jobs/*", "/companies/*").hasRole("EMPLOYER")
                         .requestMatchers( "/admin/*").hasRole("ADMIN")
+                        .requestMatchers("/webhooks/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer((oauth2) -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
                                 .decoder(jwtDecoderConfiguration)
-                                // Áp dụng bộ giải mã quyền hạn tùy chỉnh từ JWT
                                 .jwtAuthenticationConverter(new CustomJwtAuthenticationConverter())
                         )
                 );

@@ -36,6 +36,7 @@ public class PaymentTransaction {
     private BigDecimal amount;
     private String currency;        // vnd
 
+    @Enumerated(EnumType.STRING)
     private Estatus status;
 
     @CreationTimestamp

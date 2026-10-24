@@ -4,5 +4,6 @@ public enum Estatus {
     PENDING,
     REVIEWING,
     APPROVED,
-    REJECTED
+    REJECTED,
+    SUCCESS
 }
