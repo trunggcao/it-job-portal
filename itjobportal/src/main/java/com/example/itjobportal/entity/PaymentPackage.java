@@ -1,5 +1,6 @@
 package com.example.itjobportal.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,7 @@ public class PaymentPackage {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "paymentPackage", fetch = FetchType.LAZY)
     private List<PaymentTransaction> transactions;
 
