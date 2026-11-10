@@ -31,13 +31,15 @@ public class SecurityConfig {
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/status","/health","/login","/activate","/register").permitAll()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/status","/health","/login","/activate","/register").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/jobs", "/jobs/*").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/companies", "/companies/*").permitAll()
                         .requestMatchers(org.springframework.http.HttpMethod.POST, "/jobs", "/companies").hasRole("EMPLOYER")
                         .requestMatchers(org.springframework.http.HttpMethod.PUT, "/jobs/*", "/companies/*").hasRole("EMPLOYER")
                         .requestMatchers(org.springframework.http.HttpMethod.DELETE, "/jobs/*", "/companies/*").hasRole("EMPLOYER")
-                        .requestMatchers( "/admin/*").hasRole("ADMIN")
+                        .requestMatchers( "/admin/**").hasRole("ADMIN")
                         .requestMatchers("/webhooks/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -59,7 +61,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        configuration.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type","Accept"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

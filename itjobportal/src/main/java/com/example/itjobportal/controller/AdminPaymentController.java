@@ -1,6 +1,7 @@
 package com.example.itjobportal.controller;
 
 import com.example.itjobportal.dto.PaymentTransactionResponseDTO;
+import com.example.itjobportal.dto.UpdateActiveRequest;
 import com.example.itjobportal.entity.PaymentPackage;
 import com.example.itjobportal.entity.PaymentTransaction;
 import com.example.itjobportal.service.PaymentPackageService;
@@ -28,5 +29,18 @@ public class AdminPaymentController {
     public ResponseEntity<PaymentPackage> createPaymentPackage(@RequestBody PaymentPackage paymentPackage){
         PaymentPackage newPackage =  paymentPackageService.createPackage(paymentPackage);
         return ResponseEntity.status(HttpStatus.CREATED).body(newPackage);
+    }
+
+    @GetMapping("/packages")
+    public ResponseEntity<List<PaymentPackage>> getAllPackages(){
+        List<PaymentPackage> newPackage =  paymentPackageService.getAllPackages();
+        return ResponseEntity.status(HttpStatus.OK).body(newPackage);
+    }
+
+    @PatchMapping("/packages/{id}")
+    public ResponseEntity<PaymentPackage> updateActiveStatus(@PathVariable Long id,
+                                                             @RequestBody UpdateActiveRequest request){
+        PaymentPackage updatedPackage = paymentPackageService.updateActiveStatus(id, request.getIsActive());
+        return ResponseEntity.status(HttpStatus.OK).body(updatedPackage);
     }
 }
